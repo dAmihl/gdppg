@@ -3,12 +3,12 @@
 #include "register_types.h"
 
 #include "core/class_db.h"
-#include "ppg.h"
+#include "gdppg.h"
 
-void register_ppg_types() {
-    ClassDB::register_class<PPG>();
+void register_gdppg_types() {
+    ClassDB::register_class<GdPPG>();
 }
 
-void unregister_ppg_types() {
+void unregister_gdppg_types() {
    // Nothing to do here in this example.
 }

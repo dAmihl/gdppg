@@ -1,12 +1,12 @@
-/* ppg.h */
+/* gdppg.h */
 
-#ifndef PPG_H
-#define PPG_H
+#ifndef GdPPG_H
+#define GdPPG_H
 
 #include "core/reference.h"
 
-class PPG : public Reference {
-    GDCLASS(PPG, Reference);
+class GdPPG : public Reference {
+    GDCLASS(GdPPG, Reference);
 
     int count;
 
@@ -18,7 +18,7 @@ public:
     void reset();
     int get_total() const;
 
-    PPG();
+    GdPPG();
 };
 
 #endif // PPG_H
