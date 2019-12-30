@@ -30,24 +30,33 @@ void GdPPG::add_object(Variant objectData) {
 
 	for (int j = 0; j < transitions.size(); j++) {
 		String event_name = transitions.get_key_at_index(j);
-		Array state_pair = transitions.get_value_at_index(j);
+		Array state_pairs = transitions.get_value_at_index(j);
 
-		String left_state = state_pair.get(0);
-		String right_state = state_pair.get(1);
+		for (int i = 0; i < state_pairs.size(); i++) {
+			Array state_pair = state_pairs.get(i);
+			String left_state = state_pair.get(0);
+			String right_state = state_pair.get(1);
 
-		PuzzleState *tmpS1 = stateMap.get(left_state);
-		PuzzleState *tmpS2 = stateMap.get(right_state);
+			PuzzleState *tmpS1 = stateMap.get(left_state);
+			PuzzleState *tmpS2 = stateMap.get(right_state);
 
-		stateTransition->addTransition(event_name.ascii().get_data(), *tmpS1, *tmpS2);
+			stateTransition->addTransition(event_name.ascii().get_data(), *tmpS1, *tmpS2);
+
+		}
 
 		PuzzleEvent *tmpEvent = new PuzzleEvent(event_name.ascii().get_data(), tmpObject);
 		this->events.push_back(tmpEvent);
 	}
 	tmpObject->setStateTransition(*stateTransition);
 
-	PuzzleState *st = stateMap.get(default_state);
+	PuzzleState *defSt;
+	if (default_state.empty()) {
+		defSt = statesList.at(0);
+	} else {
+		defSt = stateMap.get(default_state);
+	}
 	// First state in array is default state
-	tmpObject->setCurrentState(*st);
+	tmpObject->setCurrentState(*defSt);
 
 	this->objects.push_back(tmpObject);
 }
