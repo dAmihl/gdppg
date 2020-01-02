@@ -41,7 +41,6 @@ void GdPPG::add_object(Variant objectData) {
 			PuzzleState *tmpS2 = stateMap.get(right_state);
 
 			stateTransition->addTransition(event_name.ascii().get_data(), *tmpS1, *tmpS2);
-
 		}
 
 		PuzzleEvent *tmpEvent = new PuzzleEvent(event_name.ascii().get_data(), tmpObject);
@@ -65,10 +64,41 @@ String GdPPG::get_puzzle_textual_representation() {
 	return String(this->currentPuzzle->getExtendedTextualRepresentation().c_str());
 }
 
+Ref<PPGNodeRef> GdPPG::get_puzzle_graph_representation() {
+	T_PuzzleGraphNodeList rootNodes = this->currentPuzzle->getGraphRepresentation();
+
+	PuzzleGraphNode *root = rootNodes.at(0);
+
+	Ref<PPGNodeRef> ref = map_puzzlegraphnode_for_gdscript(root);
+
+	return ref;
+}
+
+Ref<PPGNodeRef> GdPPG::map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node) {
+	Ref<PPGNodeRef> nodeRef;
+	nodeRef.instance();
+
+	PuzzleObject* tmpObj = node->getObject();
+
+	nodeRef->set_object_name(String(tmpObj->getObjectName().c_str()));
+	nodeRef->set_template_name(String(tmpObj->getTemplateName().c_str()));
+	nodeRef->set_current_state(String(tmpObj->getCurrentState().getStateName().c_str()));
+
+	T_PuzzleGraphNodeList children = node->getChildren();
+
+	for (T_PuzzleGraphNodeList::iterator c = children.begin(); c != children.end(); ++c) {
+		Ref<PPGNodeRef> child = map_puzzlegraphnode_for_gdscript(*c);
+		nodeRef->add_child(&child);
+	}
+
+	return nodeRef;
+}
+
 void GdPPG::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_object", "ppg_object_data"), &GdPPG::add_object);
 	ClassDB::bind_method(D_METHOD("generate_puzzle"), &GdPPG::generate_puzzle);
 	ClassDB::bind_method(D_METHOD("get_puzzle_textual_representation"), &GdPPG::get_puzzle_textual_representation);
+	ClassDB::bind_method(D_METHOD("get_puzzle_graph_representation"), &GdPPG::get_puzzle_graph_representation);
 }
 
 GdPPG::GdPPG() {
