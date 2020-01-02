@@ -6,6 +6,7 @@
 #include "core/reference.h"
 #include <PuzzGen.h>
 #include "PPGNodeRef.h"
+#include "PPGUpdateListener.h"
 
 class GdPPG : public Reference {
     GDCLASS(GdPPG, Reference);
@@ -17,8 +18,11 @@ class GdPPG : public Reference {
 	T_PuzzleObjectList objects;
 	T_PuzzleEventList events;
 	T_PuzzleRuleList rules;
+	HashMap<String, PuzzleEvent*> events_map;
 
 	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node);
+
+	PPGUpdateListener* update_listener;
 
 protected:
     static void _bind_methods();
@@ -28,6 +32,8 @@ public:
 	void add_object(Variant objectData);
 	String get_puzzle_textual_representation();
 	Ref<PPGNodeRef> get_puzzle_graph_representation();
+	void handle_event(String event_name);
+
 
     GdPPG();
 };

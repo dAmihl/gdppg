@@ -4,6 +4,7 @@
 
 void GdPPG::generate_puzzle() {
 	this->currentPuzzle = this->puzzGen->generatePuzzle(this->objects, this->events, this->rules);
+	this->currentPuzzle->setUpdateListener(this->update_listener);
 }
 
 void GdPPG::add_object(Variant objectData) {
@@ -44,6 +45,7 @@ void GdPPG::add_object(Variant objectData) {
 		}
 
 		PuzzleEvent *tmpEvent = new PuzzleEvent(event_name.ascii().get_data(), tmpObject);
+		this->events_map.set(event_name, tmpEvent);
 		this->events.push_back(tmpEvent);
 	}
 	tmpObject->setStateTransition(*stateTransition);
@@ -74,6 +76,11 @@ Ref<PPGNodeRef> GdPPG::get_puzzle_graph_representation() {
 	return ref;
 }
 
+void GdPPG::handle_event(String event_name) {
+	PuzzleEvent* tmpEvent = this->events_map.get(event_name);
+	this->currentPuzzle->handleEvent(*tmpEvent);
+}
+
 Ref<PPGNodeRef> GdPPG::map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node) {
 	Ref<PPGNodeRef> nodeRef;
 	nodeRef.instance();
@@ -99,6 +106,16 @@ void GdPPG::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("generate_puzzle"), &GdPPG::generate_puzzle);
 	ClassDB::bind_method(D_METHOD("get_puzzle_textual_representation"), &GdPPG::get_puzzle_textual_representation);
 	ClassDB::bind_method(D_METHOD("get_puzzle_graph_representation"), &GdPPG::get_puzzle_graph_representation);
+	ClassDB::bind_method(D_METHOD("handle_event", "event_name"), &GdPPG::handle_event);
+
+	ADD_SIGNAL(MethodInfo("ppg_puzzle_complete"));
+	ADD_SIGNAL(MethodInfo("ppg_object_state_change", PropertyInfo(Variant::STRING, "object_name"), PropertyInfo(Variant::STRING, "new_state_name")));
+	ADD_SIGNAL(MethodInfo("ppg_node_active", PropertyInfo(Variant::STRING, "noderef")));
+	ADD_SIGNAL(MethodInfo("ppg_node_complete", PropertyInfo(Variant::STRING, "noderef")));
+	ADD_SIGNAL(MethodInfo("ppg_node_incomplete", PropertyInfo(Variant::STRING, "noderef")));
+	ADD_SIGNAL(MethodInfo("ppg_event_no_effect", PropertyInfo(Variant::STRING, "object_name")));
+	//ADD_SIGNAL(MethodInfo("network_peer_packet", PropertyInfo(Variant::INT, "id"), PropertyInfo(Variant::POOL_BYTE_ARRAY, "packet")));
+
 }
 
 GdPPG::GdPPG() {
@@ -106,6 +123,6 @@ GdPPG::GdPPG() {
 }
 
 void GdPPG::initGdPPG() {
-
+	this->update_listener = new PPGUpdateListener(this);
 	this->puzzGen = new PuzzleGenerator();
 }
