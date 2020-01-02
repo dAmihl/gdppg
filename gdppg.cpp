@@ -110,9 +110,9 @@ void GdPPG::_bind_methods() {
 
 	ADD_SIGNAL(MethodInfo("ppg_puzzle_complete"));
 	ADD_SIGNAL(MethodInfo("ppg_object_state_change", PropertyInfo(Variant::STRING, "object_name"), PropertyInfo(Variant::STRING, "new_state_name")));
-	ADD_SIGNAL(MethodInfo("ppg_node_active", PropertyInfo(Variant::STRING, "noderef")));
-	ADD_SIGNAL(MethodInfo("ppg_node_complete", PropertyInfo(Variant::STRING, "noderef")));
-	ADD_SIGNAL(MethodInfo("ppg_node_incomplete", PropertyInfo(Variant::STRING, "noderef")));
+	ADD_SIGNAL(MethodInfo("ppg_node_active", PropertyInfo(Variant::OBJECT, "noderef")));
+	ADD_SIGNAL(MethodInfo("ppg_node_complete", PropertyInfo(Variant::OBJECT, "noderef")));
+	ADD_SIGNAL(MethodInfo("ppg_node_incomplete", PropertyInfo(Variant::OBJECT, "noderef")));
 	ADD_SIGNAL(MethodInfo("ppg_event_no_effect", PropertyInfo(Variant::STRING, "object_name")));
 	//ADD_SIGNAL(MethodInfo("network_peer_packet", PropertyInfo(Variant::INT, "id"), PropertyInfo(Variant::POOL_BYTE_ARRAY, "packet")));
 

@@ -4,13 +4,17 @@
 #define PPGUpdateListener_H
 
 #include "core/object.h"
+#include "PPGNodeRef.h"
 #include "ppg-core/include/PuzzleUpdateListener.h"
+#include "ppg-core/include/PuzzleNode.h"
 
 class PPGUpdateListener : public Object, public PuzzleUpdateListener {
 	GDCLASS(PPGUpdateListener, Object);
 
 private:
 	Object *manager;
+
+	Ref<PPGNodeRef> map_puzzlenode_to_noderef(PuzzleNode *N);
 
 public:
 
