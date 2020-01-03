@@ -39,6 +39,6 @@ void PPGNodeRef::set_children(Array children) {
 	this->children = children;
 }
 
-void PPGNodeRef::add_child(Ref<PPGNodeRef>* child) {
+void PPGNodeRef::add_child(Ref<PPGNodeRef> child) {
 	this->children.append(child);
 }

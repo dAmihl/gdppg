@@ -19,6 +19,8 @@ class GdPPG : public Reference {
 	T_PuzzleEventList events;
 	T_PuzzleRuleList rules;
 	HashMap<String, PuzzleEvent*> events_map;
+	HashMap<String, PuzzleObject *> objects_map;
+	HashMap<String, PuzzleState *> states_map;
 
 	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node);
 
@@ -30,6 +32,7 @@ protected:
 public:
 	void generate_puzzle();
 	void add_object(Variant objectData);
+	void add_rule(Variant ruleData);
 	String get_puzzle_textual_representation();
 	Ref<PPGNodeRef> get_puzzle_graph_representation();
 	void handle_event(String event_name);

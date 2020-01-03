@@ -20,7 +20,7 @@ public:
 	void set_current_state(String current_state);
 	void set_children(Array children);
 
-	void add_child(Ref<PPGNodeRef> *child);
+	void add_child(Ref<PPGNodeRef> child);
 
 private:
 	String object_name;
