@@ -7,6 +7,15 @@ void GdPPG::generate_puzzle() {
 	this->currentPuzzle->setUpdateListener(this->update_listener);
 }
 
+
+void GdPPG::generate_puzzle_by_yaml(String yaml_str) {
+
+	Yaml2Puzzle *y2p = new Yaml2Puzzle();
+	Puzzle *P = y2p->generatePuzzleByFile("configs/universe1.yaml");
+	this->currentPuzzle = P;
+	this->currentPuzzle->setUpdateListener(this->update_listener);
+}
+
 void GdPPG::add_object(Variant objectData) {
 
 	String object_name = objectData.call("get_object_name");
@@ -120,10 +129,6 @@ void GdPPG::handle_event(String event_name) {
 	this->currentPuzzle->handleEvent(*tmpEvent);
 }
 
-void GdPPG::generate_puzzle_by_yaml(String yaml_str) {
-
-
-}
 
 Ref<PPGNodeRef> GdPPG::map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node) {
 	Ref<PPGNodeRef> nodeRef;

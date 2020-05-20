@@ -10,8 +10,8 @@ env_gdppg.Append(CPPPATH=['ppg-yaml/includes/ppg-core/include', 'ppg-yaml/includ
 env_gdppg.Append(LIBPATH=['ppg-yaml/includes/ppg-core/includes','ppg-yaml/includes/thirdparty/yaml-cpp/include/yaml-cpp', 'ppg-yaml/include']) # this is a path relative to /modules/gdppg/
 env.Append(LIBPATH=['#modules/gdppg/ppg-yaml/lib']) # this is a path relative to /modules/gdppg/
 
-#env.Append(LIBS=['ppg-yaml'])
+#env.Append(LIBS=["ppg-yaml.lib", "ppg-core.lib", "yaml-cpp.lib"])
 # Workaround because scons wants to add the extension .windows.tools.x64.lib
-env.Append(LINKFLAGS=["ppg-yaml.lib", "ppg-core.lib"])
+env.Append(LINKFLAGS=["ppg-yaml.lib", "ppg-core.lib", "yaml-cpp.lib"])
 
 env_gdppg.Append(CXXFLAGS=['-std=c++11']) # Flags for C++ code only
