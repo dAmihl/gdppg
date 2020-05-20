@@ -4,6 +4,7 @@
 #define GdPPG_H
 
 #include "core/reference.h"
+#include "Yaml2Puzzle.h"
 #include "PuzzGen.h"
 #include "PPGNodeRef.h"
 #include "PPGUpdateListener.h"
@@ -36,6 +37,7 @@ public:
 	String get_puzzle_textual_representation();
 	Ref<PPGNodeRef> get_puzzle_graph_representation();
 	void handle_event(String event_name);
+	void generate_puzzle_by_yaml(String yaml_str);
 
 
     GdPPG();

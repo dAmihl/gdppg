@@ -120,6 +120,11 @@ void GdPPG::handle_event(String event_name) {
 	this->currentPuzzle->handleEvent(*tmpEvent);
 }
 
+void GdPPG::generate_puzzle_by_yaml(String yaml_str) {
+
+
+}
+
 Ref<PPGNodeRef> GdPPG::map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node) {
 	Ref<PPGNodeRef> nodeRef;
 	nodeRef.instance();
