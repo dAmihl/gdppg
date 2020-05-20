@@ -10,7 +10,7 @@ void GdPPG::generate_puzzle() {
 void GdPPG::generate_puzzle_by_yaml_file(String file_name) {
 
 	Yaml2Puzzle *y2p = new Yaml2Puzzle();
-	Puzzle *P = y2p->generatePuzzleByFile(file_name);
+	Puzzle *P = y2p->generatePuzzleByFile(file_name.ascii().get_data());
 	this->currentPuzzle = P;
 	this->currentPuzzle->setUpdateListener(this->update_listener);
 }
@@ -18,7 +18,7 @@ void GdPPG::generate_puzzle_by_yaml_file(String file_name) {
 void GdPPG::generate_puzzle_by_yaml_string(String yaml_str) {
 
 	Yaml2Puzzle *y2p = new Yaml2Puzzle();
-	Puzzle *P = y2p->generatePuzzleByString(yaml_str);
+	Puzzle *P = y2p->generatePuzzleByString(yaml_str.ascii().get_data());
 	this->currentPuzzle = P;
 	this->currentPuzzle->setUpdateListener(this->update_listener);
 }
