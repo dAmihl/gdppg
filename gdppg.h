@@ -37,7 +37,8 @@ public:
 	String get_puzzle_textual_representation();
 	Ref<PPGNodeRef> get_puzzle_graph_representation();
 	void handle_event(String event_name);
-	void generate_puzzle_by_yaml(String yaml_str);
+	void generate_puzzle_by_yaml_string(String yaml_str);
+	void generate_puzzle_by_yaml_file(String file_name);
 
 
     GdPPG();

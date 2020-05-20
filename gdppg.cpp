@@ -7,11 +7,18 @@ void GdPPG::generate_puzzle() {
 	this->currentPuzzle->setUpdateListener(this->update_listener);
 }
 
-
-void GdPPG::generate_puzzle_by_yaml(String yaml_str) {
+void GdPPG::generate_puzzle_by_yaml_file(String file_name) {
 
 	Yaml2Puzzle *y2p = new Yaml2Puzzle();
-	Puzzle *P = y2p->generatePuzzleByFile("configs/universe1.yaml");
+	Puzzle *P = y2p->generatePuzzleByFile(file_name);
+	this->currentPuzzle = P;
+	this->currentPuzzle->setUpdateListener(this->update_listener);
+}
+
+void GdPPG::generate_puzzle_by_yaml_string(String yaml_str) {
+
+	Yaml2Puzzle *y2p = new Yaml2Puzzle();
+	Puzzle *P = y2p->generatePuzzleByString(yaml_str);
 	this->currentPuzzle = P;
 	this->currentPuzzle->setUpdateListener(this->update_listener);
 }
@@ -154,7 +161,8 @@ void GdPPG::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_object", "ppg_object_data"), &GdPPG::add_object);
 	ClassDB::bind_method(D_METHOD("add_rule", "ppg_rule_data"), &GdPPG::add_rule);
 	ClassDB::bind_method(D_METHOD("generate_puzzle"), &GdPPG::generate_puzzle);
-	ClassDB::bind_method(D_METHOD("generate_puzzle_by_yaml", "yaml_string"), &GdPPG::generate_puzzle_by_yaml);
+	ClassDB::bind_method(D_METHOD("generate_puzzle_by_yaml_file", "file_name"), &GdPPG::generate_puzzle_by_yaml_file);
+	ClassDB::bind_method(D_METHOD("generate_puzzle_by_yaml_string", "yaml_string"), &GdPPG::generate_puzzle_by_yaml_string);
 	ClassDB::bind_method(D_METHOD("get_puzzle_textual_representation"), &GdPPG::get_puzzle_textual_representation);
 	ClassDB::bind_method(D_METHOD("get_puzzle_graph_representation"), &GdPPG::get_puzzle_graph_representation);
 	ClassDB::bind_method(D_METHOD("handle_event", "event_name"), &GdPPG::handle_event);
