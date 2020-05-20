@@ -154,9 +154,11 @@ void GdPPG::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_object", "ppg_object_data"), &GdPPG::add_object);
 	ClassDB::bind_method(D_METHOD("add_rule", "ppg_rule_data"), &GdPPG::add_rule);
 	ClassDB::bind_method(D_METHOD("generate_puzzle"), &GdPPG::generate_puzzle);
+	ClassDB::bind_method(D_METHOD("generate_puzzle_by_yaml", "yaml_string"), &GdPPG::generate_puzzle_by_yaml);
 	ClassDB::bind_method(D_METHOD("get_puzzle_textual_representation"), &GdPPG::get_puzzle_textual_representation);
 	ClassDB::bind_method(D_METHOD("get_puzzle_graph_representation"), &GdPPG::get_puzzle_graph_representation);
 	ClassDB::bind_method(D_METHOD("handle_event", "event_name"), &GdPPG::handle_event);
+	
 
 	ADD_SIGNAL(MethodInfo("ppg_puzzle_complete"));
 	ADD_SIGNAL(MethodInfo("ppg_object_state_change", PropertyInfo(Variant::STRING, "object_name"), PropertyInfo(Variant::STRING, "new_state_name")));
