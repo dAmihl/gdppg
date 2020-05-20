@@ -5,8 +5,8 @@
 
 #include "core/object.h"
 #include "PPGNodeRef.h"
-#include "ppg-core/include/PuzzleUpdateListener.h"
-#include "ppg-core/include/PuzzleNode.h"
+#include "PuzzleUpdateListener.h"
+#include "PuzzleNode.h"
 
 class PPGUpdateListener : public Object, public PuzzleUpdateListener {
 	GDCLASS(PPGUpdateListener, Object);

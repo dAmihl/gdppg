@@ -4,7 +4,7 @@
 #define GdPPG_H
 
 #include "core/reference.h"
-#include <PuzzGen.h>
+#include "PuzzGen.h"
 #include "PPGNodeRef.h"
 #include "PPGUpdateListener.h"
 
