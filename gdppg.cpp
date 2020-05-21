@@ -13,6 +13,7 @@ void GdPPG::generate_puzzle_by_yaml_file(String file_name) {
 	Puzzle *P = y2p->generatePuzzleByFile(file_name.ascii().get_data());
 	this->currentPuzzle = P;
 	this->currentPuzzle->setUpdateListener(this->update_listener);
+	this->generate_events_map(P->getEvents());
 }
 
 void GdPPG::generate_puzzle_by_yaml_string(String yaml_str) {
@@ -21,6 +22,7 @@ void GdPPG::generate_puzzle_by_yaml_string(String yaml_str) {
 	Puzzle *P = y2p->generatePuzzleByString(yaml_str.ascii().get_data());
 	this->currentPuzzle = P;
 	this->currentPuzzle->setUpdateListener(this->update_listener);
+	this->generate_events_map(P->getEvents());
 }
 
 void GdPPG::add_object(Variant objectData) {
@@ -175,6 +177,15 @@ void GdPPG::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("ppg_node_incomplete", PropertyInfo(Variant::OBJECT, "noderef")));
 	ADD_SIGNAL(MethodInfo("ppg_event_no_effect", PropertyInfo(Variant::STRING, "object_name")));
 	//ADD_SIGNAL(MethodInfo("network_peer_packet", PropertyInfo(Variant::INT, "id"), PropertyInfo(Variant::POOL_BYTE_ARRAY, "packet")));
+}
+
+void GdPPG::generate_events_map(T_PuzzleEventList events) {
+	for (T_PuzzleEventList::iterator it = events.begin(); it != events.end(); ++it) {
+		String obj_name = (*it)->getRelatedObject()->getObjectName().c_str();
+		String event_name = (*it)->getEventName().c_str();
+		String key = obj_name + ":" + event_name;
+		this->events_map.set(key, *it);
+	}
 }
 
 GdPPG::GdPPG() {
