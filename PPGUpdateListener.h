@@ -3,7 +3,7 @@
 #ifndef PPGUpdateListener_H
 #define PPGUpdateListener_H
 
-#include "ppg-yaml/vendor/ppg-core/src/PuzzGen.h"
+#include "PuzzGen.h"
 #include "core/object.h"
 #include "PPGNodeRef.h"
 

@@ -5,9 +5,9 @@
 
 #include "core/reference.h"
 #include "core/print_string.h"
-#include "ppg-yaml/vendor/ppg-core/src/PuzzGen.h"
+#include "PuzzGen.h"
 #include "PPGUpdateListener.h"
-#include "ppg-yaml/src/Yaml2Puzzle.h"
+#include "Yaml2Puzzle.h"
 
 class GdPPG : public Reference {
     GDCLASS(GdPPG, Reference);
