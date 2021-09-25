@@ -5,33 +5,30 @@
 
 #include "core/reference.h"
 #include "core/print_string.h"
-#include "Yaml2Puzzle.h"
-#include "PuzzGen.h"
-#include "PPGNodeRef.h"
+#include "ppg-yaml/vendor/ppg-core/src/PuzzGen.h"
 #include "PPGUpdateListener.h"
+#include "ppg-yaml/src/Yaml2Puzzle.h"
 
 class GdPPG : public Reference {
     GDCLASS(GdPPG, Reference);
 
-	void initGdPPG();
+	PPG::UPtr<PPG::Puzzle> currentPuzzle;
+	PPG::Generator puzzGen;
+	PPG::Context c;
 
-	Puzzle *currentPuzzle;
-	PuzzleGenerator *puzzGen;
-	T_PuzzleObjectList objects;
-	T_PuzzleEventList events;
-	T_PuzzleRuleList rules;
-	HashMap<String, PuzzleEvent*> events_map;
-	HashMap<String, PuzzleObject *> objects_map;
-	HashMap<String, PuzzleState *> states_map;
+	HashMap<String, PPG::Ptr<PPG::Event>> events_map;
+	HashMap < String, PPG::Ptr<PPG::Object>> objects_map;
+	HashMap<String, PPG::State > states_map;
 
-	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node);
-
+	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PPG::GraphNode *node);
 	PPGUpdateListener* update_listener;
 
 protected:
     static void _bind_methods();
 
 public:
+	GdPPG() { update_listener = new PPGUpdateListener(this); }
+
 	void generate_puzzle();
 	void add_object(Variant objectData);
 	void add_rule(Variant ruleData);
@@ -42,9 +39,7 @@ public:
 	void generate_puzzle_by_yaml_file(String file_name);
 
 private:
-	void generate_events_map(T_PuzzleEventList events);
-
-    GdPPG();
+	void generate_events_map(PPG::Vec<PPG::Ptr<PPG::Event> > events);
 };
 
 #endif // GdPPG_H
