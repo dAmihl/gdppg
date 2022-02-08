@@ -3,7 +3,7 @@
 #ifndef PPGUpdateListener_H
 #define PPGUpdateListener_H
 
-#include "core/object.h"
+#include "core/object/object.h"
 #include "PPGNodeRef.h"
 #include "PuzzleUpdateListener.h"
 #include "PuzzleNode.h"

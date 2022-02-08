@@ -3,11 +3,11 @@
 #ifndef PPGNodeRef_H
 #define PPGNodeRef_H
 
-#include "core/reference.h"
+#include "core/object/ref_counted.h"
 
-class PPGNodeRef : public Reference {
+class PPGNodeRef : public RefCounted {
 
-	GDCLASS(PPGNodeRef, Reference);
+	GDCLASS(PPGNodeRef, RefCounted);
 
 public:
 	String get_object_name();
