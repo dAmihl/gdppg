@@ -1,0 +1,3 @@
+[submodule "vendor/ppg-yaml"]
+	path = vendor/ppg-yaml
+	url = https://github.com/dAmihl/ppg-yaml.git
