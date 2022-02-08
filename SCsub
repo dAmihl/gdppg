@@ -3,15 +3,14 @@
 Import('env')
 
 
-
 env_gdppg = env.Clone()
 env_gdppg.add_source_files(env.modules_sources, "*.cpp") # Add all cpp files to the build
-env_gdppg.Append(CPPPATH=['ppg-yaml/includes/ppg-core/include', 'ppg-yaml/include', 'ppg-yaml/includes/thirdparty/yaml-cpp/include']) # this is a path relative to /modules/gdppg/
-env_gdppg.Append(LIBPATH=['ppg-yaml/includes/ppg-core/includes','ppg-yaml/includes/thirdparty/yaml-cpp/include/yaml-cpp', 'ppg-yaml/include']) # this is a path relative to /modules/gdppg/
-env.Append(LIBPATH=['#modules/gdppg/ppg-yaml/lib']) # this is a path relative to /modules/gdppg/
+env_gdppg.Append(CPPPATH=['vendor/ppg-yaml/vendor/ppg-core/src', 'vendor/ppg-yaml/src', 'vendor/ppg-yaml/vendor/yaml-cpp/include']) # this is a path relative to /modules/gdppg/
+env_gdppg.Append(LIBPATH=['vendor/ppg-yaml/build/Debug']) # this is a path relative to /modules/gdppg/
+env.Append(LIBPATH=['#modules/gdppg/vendor/ppg-yaml/build/Debug']) # this is a path relative to /modules/gdppg/
 
 #env.Append(LIBS=["ppg-yaml.lib", "ppg-core.lib", "yaml-cpp.lib"])
 # Workaround because scons wants to add the extension .windows.tools.x64.lib
-env.Append(LINKFLAGS=["ppg-yaml.lib", "ppg-core.lib", "yaml-cpp.lib"])
+env.Append(LINKFLAGS=["ppg-yaml.lib"])
 
 env_gdppg.Append(CXXFLAGS=['-std=c++0x']) # Flags for C++ code only

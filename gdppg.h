@@ -15,18 +15,18 @@ class GdPPG : public RefCounted {
 
 	void initGdPPG();
 
-	Puzzle *currentPuzzle;
-	PuzzleGenerator *puzzGen;
-	T_PuzzleObjectList objects;
-	T_PuzzleEventList events;
-	T_PuzzleRuleList rules;
-	HashMap<String, PuzzleEvent*> events_map;
-	HashMap<String, PuzzleObject *> objects_map;
-	HashMap<String, PuzzleState *> states_map;
+	/*PPG::Puzzle *currentPuzzle;
+	PPG::Generator *puzzGen;
+	PPG::ObjVec objects;
+	PPG::EventVec events;
+	PPG::RuleVec rules;
+	PPG::EventMap events_map;
+	PPG::Map<String, PuzzleObject&> objects_map;
+	PPG::Map<String, PuzzleState&> states_map;*/
 
-	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node);
+	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PPG::GraphNode& node);
 
-	PPGUpdateListener* update_listener;
+	//PPGUpdateListener* update_listener;
 
 protected:
     static void _bind_methods();
@@ -42,7 +42,7 @@ public:
 	void generate_puzzle_by_yaml_file(String file_name);
 
 private:
-	void generate_events_map(T_PuzzleEventList events);
+	void generate_events_map(PPG::EventVec events);
 
     GdPPG();
 };
