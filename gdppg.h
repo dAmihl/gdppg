@@ -15,18 +15,13 @@ class GdPPG : public RefCounted {
 
 	void initGdPPG();
 
-	/*PPG::Puzzle *currentPuzzle;
-	PPG::Generator *puzzGen;
-	PPG::ObjVec objects;
-	PPG::EventVec events;
-	PPG::RuleVec rules;
-	PPG::EventMap events_map;
-	PPG::Map<String, PuzzleObject&> objects_map;
-	PPG::Map<String, PuzzleState&> states_map;*/
+	PPG::UPtr<PPG::Puzzle> currentPuzzle;
+	PPG::WfcGenerator puzzGen;
+	PPG::Context currentContext;
 
-	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PPG::GraphNode& node);
+	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PPG::GraphNode* node);
 
-	//PPGUpdateListener* update_listener;
+	PPGUpdateListener* update_listener;
 
 protected:
     static void _bind_methods();
