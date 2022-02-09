@@ -33,9 +33,7 @@ void GdPPG::add_object(Variant objectData) {
 	auto tmpObject = currentContext.add<PPG::Object>(object_name.ascii().get_data());
 	tmpObject->setTemplateName(object_name.ascii().get_data());
 
-	HashMap<String, PPG::Event> events_map;
-	HashMap<String, PPG::Object> objects_map;
-	HashMap<String, PPG::State> states_map;
+	
 	Vector<PPG::State> stateList;
 
 	for (int i = 0; i < states.size(); i++) {
@@ -127,14 +125,14 @@ Ref<PPGNodeRef> GdPPG::get_puzzle_graph_representation() {
 }
 
 void GdPPG::handle_event(String event_name) {
-	/*PuzzleEvent *tmpEvent = this->events_map.get(event_name);
-	this->currentPuzzle->handleEvent(*tmpEvent);*/
+	auto tmpEvent = events_map.get(event_name);
+	currentPuzzle->handleEvent(*tmpEvent);
 }
 
 
 Ref<PPGNodeRef> GdPPG::map_puzzlegraphnode_for_gdscript(PPG::GraphNode* node) {
 	Ref<PPGNodeRef> nodeRef;
-//	nodeRef.instance();
+	nodeRef.instantiate();
 
 	auto tmpObj = node->getObject();
 
@@ -173,12 +171,12 @@ void GdPPG::_bind_methods() {
 }
 
 void GdPPG::generate_events_map(PPG::EventVec events) {
-	/*for (T_PuzzleEventList::iterator it = events.begin(); it != events.end(); ++it) {
-		String obj_name = (*it)->getRelatedObject()->getObjectName().c_str();
-		String event_name = (*it)->getEventName().c_str();
+	for (auto& it : events) {
+		String obj_name = it->getRelatedObject().getObjectName().c_str();
+		String event_name = it->getEventName().c_str();
 		String key = obj_name + ":" + event_name;
-		this->events_map.set(key, *it);
-	}*/
+		events_map.set(key, it);
+	}
 }
 
 GdPPG::GdPPG() {

@@ -19,6 +19,10 @@ class GdPPG : public RefCounted {
 	PPG::WfcGenerator puzzGen;
 	PPG::Context currentContext;
 
+	HashMap<String, PPG::Ptr<PPG::Event>> events_map;
+	HashMap<String, PPG::Object> objects_map;
+	HashMap<String, PPG::State> states_map;
+
 	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PPG::GraphNode* node);
 
 	PPGUpdateListener* update_listener;
