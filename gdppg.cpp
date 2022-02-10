@@ -125,10 +125,16 @@ Ref<PPGNodeRef> GdPPG::get_puzzle_graph_representation() {
 }
 
 void GdPPG::handle_event(String event_name) {
-	auto tmpEvent = events_map.get(event_name);
+	PPG::Ptr<PPG::Event> tmpEvent = events_map.get(event_name);
 	if (tmpEvent != nullptr)
 	{
 		currentPuzzle->handleEvent(*tmpEvent);
+	}
+	else
+	{
+		print_error("Event not found: ");
+		print_error(event_name);
+		print_error("\n");
 	}
 }
 
@@ -179,13 +185,16 @@ void GdPPG::generate_events_map(PPG::EventVec events) {
 		String event_name = it->getEventName().c_str();
 		String key = obj_name + ":" + event_name;
 		events_map.set(key, it);
+		print_error("Added Event: ");
+		print_error(key);
+		print_error("\n");
 	}
 }
 
 GdPPG::GdPPG() {
-	//this->initGdPPG();
+	this->initGdPPG();
 }
 
 void GdPPG::initGdPPG() {
-	this->update_listener = new PPGUpdateListener(this);
+	update_listener = new PPGUpdateListener(this);
 }
