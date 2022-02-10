@@ -3,15 +3,15 @@
 #ifndef GdPPG_H
 #define GdPPG_H
 
-#include "core/object/ref_counted.h"
-#include "core/variant/variant.h"
+#include "core/reference.h"
+#include "core/print_string.h"
 #include "Yaml2Puzzle.h"
 #include "PuzzGen.h"
 #include "PPGNodeRef.h"
 #include "PPGUpdateListener.h"
 
-class GdPPG : public RefCounted {
-    GDCLASS(GdPPG, RefCounted);
+class GdPPG : public Reference {
+    GDCLASS(GdPPG, Reference);
 
 	void initGdPPG();
 

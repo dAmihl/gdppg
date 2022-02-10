@@ -41,7 +41,7 @@ void GdPPG::add_object(Variant objectData) {
 		PPG::State tmpState{ stateName.ascii().get_data() };
 		states_map.set(stateName, tmpState);
 		states_map.set(stateName, tmpState);
-		stateList.append(tmpState);
+		stateList.push_back(tmpState);
 	}
 
 	PPG::StateTransition stateTransition;
@@ -135,7 +135,7 @@ void GdPPG::handle_event(String event_name) {
 
 Ref<PPGNodeRef> GdPPG::map_puzzlegraphnode_for_gdscript(PPG::GraphNode* node) {
 	Ref<PPGNodeRef> nodeRef;
-	nodeRef.instantiate();
+	nodeRef.instance();
 
 	auto tmpObj = node->getObject();
 
