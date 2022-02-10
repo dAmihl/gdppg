@@ -126,7 +126,10 @@ Ref<PPGNodeRef> GdPPG::get_puzzle_graph_representation() {
 
 void GdPPG::handle_event(String event_name) {
 	auto tmpEvent = events_map.get(event_name);
-	currentPuzzle->handleEvent(*tmpEvent);
+	if (tmpEvent != nullptr)
+	{
+		currentPuzzle->handleEvent(*tmpEvent);
+	}
 }
 
 
