@@ -15,16 +15,15 @@ class GdPPG : public Reference {
 
 	void initGdPPG();
 
-	Puzzle *currentPuzzle;
-	PuzzleGenerator *puzzGen;
-	T_PuzzleObjectList objects;
-	T_PuzzleEventList events;
-	T_PuzzleRuleList rules;
-	HashMap<String, PuzzleEvent*> events_map;
-	HashMap<String, PuzzleObject *> objects_map;
-	HashMap<String, PuzzleState *> states_map;
+	PPG::UPtr<PPG::Puzzle> currentPuzzle;
+	PPG::WfcGenerator puzzGen;
+	PPG::Context currentContext;
 
-	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node);
+	HashMap<String, PPG::Ptr<PPG::Event>> events_map;
+	HashMap<String, PPG::Object> objects_map;
+	HashMap<String, PPG::State> states_map;
+
+	Ref<PPGNodeRef> map_puzzlegraphnode_for_gdscript(PPG::GraphNode* node);
 
 	PPGUpdateListener* update_listener;
 
@@ -42,7 +41,7 @@ public:
 	void generate_puzzle_by_yaml_file(String file_name);
 
 private:
-	void generate_events_map(T_PuzzleEventList events);
+	void generate_events_map(PPG::EventVec events);
 
     GdPPG();
 };

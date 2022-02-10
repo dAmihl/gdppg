@@ -3,26 +3,23 @@
 #include "gdppg.h"
 
 void GdPPG::generate_puzzle() {
-	this->currentPuzzle = this->puzzGen->generatePuzzle(this->objects, this->events, this->rules);
-	this->currentPuzzle->setUpdateListener(this->update_listener);
+	currentPuzzle = puzzGen.generatePuzzle(currentContext);
+	currentPuzzle->setUpdateListener(update_listener);
 }
 
 void GdPPG::generate_puzzle_by_yaml_file(String file_name) {
 
-	Yaml2Puzzle *y2p = new Yaml2Puzzle();
-	Puzzle *P = y2p->generatePuzzleByFile(file_name.ascii().get_data());
-	this->currentPuzzle = P;
-	this->currentPuzzle->setUpdateListener(this->update_listener);
-	this->generate_events_map(P->getEvents());
+	Yaml2Puzzle y2p;
+	currentPuzzle = y2p.generatePuzzleByFile(file_name.ascii().get_data());
+	currentPuzzle->setUpdateListener(update_listener);
+	generate_events_map(currentPuzzle->getContext().getEvents());
 }
 
 void GdPPG::generate_puzzle_by_yaml_string(String yaml_str) {
-
-	Yaml2Puzzle *y2p = new Yaml2Puzzle();
-	Puzzle *P = y2p->generatePuzzleByString(yaml_str.ascii().get_data());
-	this->currentPuzzle = P;
-	this->currentPuzzle->setUpdateListener(this->update_listener);
-	this->generate_events_map(P->getEvents());
+	Yaml2Puzzle y2p;
+	currentPuzzle = y2p.generatePuzzleByString(yaml_str.ascii().get_data());
+	currentPuzzle->setUpdateListener(update_listener);
+	generate_events_map(currentPuzzle->getContext().getEvents());
 }
 
 void GdPPG::add_object(Variant objectData) {
@@ -33,20 +30,21 @@ void GdPPG::add_object(Variant objectData) {
 	String default_state = objectData.call("get_default_state");
 	Dictionary events_reversible = objectData.call("get_events_reversible");
 
-	PuzzleObject *tmpObject = new PuzzleObject(object_name.ascii().get_data());
+	auto tmpObject = currentContext.add<PPG::Object>(object_name.ascii().get_data());
 	tmpObject->setTemplateName(object_name.ascii().get_data());
 
-	HashMap<String, PuzzleState *> stateMap;
-	PuzzleList<PuzzleState *>::Type statesList;
+	
+	Vector<PPG::State> stateList;
 
 	for (int i = 0; i < states.size(); i++) {
 		String stateName = states[i];
-		PuzzleState *tmpState = new PuzzleState(stateName.ascii().get_data());
-		stateMap.set(stateName, tmpState);
-		statesList.push_back(tmpState);
+		PPG::State tmpState{ stateName.ascii().get_data() };
+		states_map.set(stateName, tmpState);
+		states_map.set(stateName, tmpState);
+		stateList.push_back(tmpState);
 	}
 
-	StateTransition *stateTransition = new StateTransition();
+	PPG::StateTransition stateTransition;
 
 	for (int j = 0; j < transitions.size(); j++) {
 		String event_name = transitions.get_key_at_index(j);
@@ -57,42 +55,35 @@ void GdPPG::add_object(Variant objectData) {
 			String left_state = state_pair.get(0);
 			String right_state = state_pair.get(1);
 
-			PuzzleState *tmpS1 = stateMap.get(left_state);
-			PuzzleState *tmpS2 = stateMap.get(right_state);
-			this->states_map.set(left_state, tmpS1);
-			this->states_map.set(right_state, tmpS2);
-			stateTransition->addTransition(event_name.ascii().get_data(), *tmpS1, *tmpS2);
+			auto tmpS1 = states_map.get(left_state);
+			auto tmpS2 = states_map.get(right_state);
+			stateTransition.addTransition(event_name.ascii().get_data(), tmpS1, tmpS2);
 		}
 
-		PuzzleEvent *tmpEvent = new PuzzleEvent(event_name.ascii().get_data(), tmpObject);
+		PPG::Event tmpEvent{ event_name.ascii().get_data(), tmpObject };
 		bool reversible = events_reversible.get(event_name, false);
-		tmpEvent->setIsReversible(reversible);
-		this->events_map.set(event_name, tmpEvent);
-		this->events.push_back(tmpEvent);
+		tmpEvent.setIsReversible(reversible);
 	}
-	tmpObject->setStateTransition(*stateTransition);
+	tmpObject->setStateTransition(stateTransition);
 
-	PuzzleState *defSt;
-	if (default_state.empty()) {
-		defSt = statesList.at(0);
+	PPG::State defSt;
+	if (default_state.size() == 0) {
+		defSt = stateList.get(0);
 	} else {
-		defSt = stateMap.get(default_state);
+		defSt = states_map.get(default_state);
 	}
 	// First state in array is default state
-	tmpObject->setCurrentState(*defSt);
-
-	this->objects.push_back(tmpObject);
-	this->objects_map.set(object_name, tmpObject);
+	tmpObject->setCurrentState(defSt);
 }
 
 void GdPPG::add_rule(Variant ruleData) {
-	String lh_object = ruleData.call("get_lh_object");
+	/*String lh_object = ruleData.call("get_lh_object");
 	String lh_state = ruleData.call("get_lh_state");
 	String rh_object = ruleData.call("get_rh_object");
 	String rh_state = ruleData.call("get_rh_state");
 	String rule_type = ruleData.call("get_rule_type");
 
-						  PuzzleObject *lh_ppg_object = this->objects_map.get(lh_object);
+	PuzzleObject* lh_ppg_object = currentContext.getObjects().get(lh_object);
 	PuzzleState *lh_ppg_state = nullptr;
 	if (!lh_state.empty()) {
 		lh_ppg_state = this->states_map.get(lh_state);
@@ -116,17 +107,17 @@ void GdPPG::add_rule(Variant ruleData) {
 	}
 
 	PuzzleRule *tmpRule = new PuzzleRule(lh_ppg_object, lh_ppg_state, rh_ppg_object, rh_ppg_state, type);
-	this->rules.push_back(*tmpRule);
+	this->rules.push_back(*tmpRule);*/
 }
 
 String GdPPG::get_puzzle_textual_representation() {
-	return String(this->currentPuzzle->getExtendedTextualRepresentation().c_str());
+	return String(currentPuzzle->getExtendedTextualRepresentation().c_str());
 }
 
 Ref<PPGNodeRef> GdPPG::get_puzzle_graph_representation() {
-	T_PuzzleGraphNodeList rootNodes = this->currentPuzzle->getGraphRepresentation();
+	auto rootNodes = currentPuzzle->getGraphRepresentation();
 
-	PuzzleGraphNode *root = rootNodes.at(0);
+	auto root = rootNodes.at(0);
 
 	Ref<PPGNodeRef> ref = map_puzzlegraphnode_for_gdscript(root);
 
@@ -134,24 +125,33 @@ Ref<PPGNodeRef> GdPPG::get_puzzle_graph_representation() {
 }
 
 void GdPPG::handle_event(String event_name) {
-	PuzzleEvent *tmpEvent = this->events_map.get(event_name);
-	this->currentPuzzle->handleEvent(*tmpEvent);
+	PPG::Ptr<PPG::Event> tmpEvent = events_map.get(event_name);
+	if (tmpEvent != nullptr)
+	{
+		currentPuzzle->handleEvent(*tmpEvent);
+	}
+	else
+	{
+		print_error("Event not found: ");
+		print_error(event_name);
+		print_error("\n");
+	}
 }
 
 
-Ref<PPGNodeRef> GdPPG::map_puzzlegraphnode_for_gdscript(PuzzleGraphNode *node) {
+Ref<PPGNodeRef> GdPPG::map_puzzlegraphnode_for_gdscript(PPG::GraphNode* node) {
 	Ref<PPGNodeRef> nodeRef;
 	nodeRef.instance();
 
-	PuzzleObject *tmpObj = node->getObject();
+	auto tmpObj = node->getObject();
 
-	nodeRef->set_object_name(String(tmpObj->getObjectName().c_str()));
-	nodeRef->set_template_name(String(tmpObj->getTemplateName().c_str()));
-	nodeRef->set_current_state(String(tmpObj->getCurrentState().getStateName().c_str()));
+	nodeRef->set_object_name(String(tmpObj.getObjectName().c_str()));
+	nodeRef->set_template_name(String(tmpObj.getTemplateName().c_str()));
+	nodeRef->set_current_state(String(tmpObj.getCurrentState().getName().c_str()));
 
-	T_PuzzleGraphNodeList children = node->getChildren();
+	PPG::Vec<PPG::GraphNode*> children = node->getChildren();
 
-	for (T_PuzzleGraphNodeList::iterator c = children.begin(); c != children.end(); ++c) {
+	for (auto& c = children.begin(); c != children.end(); ++c) {
 		Ref<PPGNodeRef> child = map_puzzlegraphnode_for_gdscript(*c);
 		nodeRef->add_child(child);
 	}
@@ -179,12 +179,15 @@ void GdPPG::_bind_methods() {
 	//ADD_SIGNAL(MethodInfo("network_peer_packet", PropertyInfo(Variant::INT, "id"), PropertyInfo(Variant::POOL_BYTE_ARRAY, "packet")));
 }
 
-void GdPPG::generate_events_map(T_PuzzleEventList events) {
-	for (T_PuzzleEventList::iterator it = events.begin(); it != events.end(); ++it) {
-		String obj_name = (*it)->getRelatedObject()->getObjectName().c_str();
-		String event_name = (*it)->getEventName().c_str();
+void GdPPG::generate_events_map(PPG::EventVec events) {
+	for (auto& it : events) {
+		String obj_name = it->getRelatedObject().getObjectName().c_str();
+		String event_name = it->getEventName().c_str();
 		String key = obj_name + ":" + event_name;
-		this->events_map.set(key, *it);
+		events_map.set(key, it);
+		print_error("Added Event: ");
+		print_error(key);
+		print_error("\n");
 	}
 }
 
@@ -193,6 +196,5 @@ GdPPG::GdPPG() {
 }
 
 void GdPPG::initGdPPG() {
-	this->update_listener = new PPGUpdateListener(this);
-	this->puzzGen = new PuzzleGenerator();
+	update_listener = new PPGUpdateListener(this);
 }
