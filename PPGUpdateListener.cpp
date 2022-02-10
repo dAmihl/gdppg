@@ -2,7 +2,7 @@
 
 Ref<PPGNodeRef> PPGUpdateListener::map_puzzlenode_to_noderef(PPG::Node& N) {
 	Ref<PPGNodeRef> ref;
-	//ref.instance();
+	ref.instance();
 	ref->set_object_name(String(N.getRelatedObject().getObjectName().c_str()));
 	ref->set_current_state(String(N.getRelatedObject().getCurrentState().getName().c_str()));
 	return ref;
